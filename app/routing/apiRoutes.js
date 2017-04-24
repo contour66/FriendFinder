@@ -1,28 +1,23 @@
-// ===============================================================================
+
 // LOAD DATA
-// We are linking our routes to a series of "data" sources.
-// These data sources hold arrays of information on table-data, waitinglist, etc.
 // ===============================================================================
 var friends = require("../data/friends");
-
-// ===============================================================================
-// ROUTING
-// ===============================================================================
 
 // Function to find the smallest element in an array
 Array.prototype.minArray = function() {
     return Math.min.apply(Math, this);
 };
  
+// ROUTING
+// ===============================================================================
 module.exports = function(app) {
   // API GET Requests
-  // Below code handles when users "visit" a page.
-  // In each of the below cases when a user visits a link
-  // they are shown a JSON of the data in the table)
+  // Below code handles the data for the friends.js page.
   // ===============================================================================
   app.get("/api/friends", function(req, res) {
     res.json(friends);
   });
+
   // API POST Requests
   // Below code handles when a user submits a form and thus submits data to the server.
   // In each of the below cases, when a user submits form data (a JSON object)
@@ -52,29 +47,38 @@ module.exports = function(app) {
           console.log("MatchScore: " + matchScore);
           // var newScore = Math.abs(matchScore - userScore);
         }
-        
+        // Get the absolute value of the the user's score and each match
         var totalScore = Math.abs(matchScore - userScore);
-          console.log("TotalScore: "+totalScore);
-          friendFoundArray.push(totalScore);
-          console.log("Friends scores: " + friendFoundArray);
-       
+        console.log("TotalScore: "+totalScore);
+        friendFoundArray.push(totalScore);
+        console.log("Friends scores: " + friendFoundArray);
       } 
-         
-          res.json(true);
+      //Find the lowest difference and get the index of the matches
+      var lowestDifference = Math.min.apply(Math, friendFoundArray);     
+      var count = 0;                            
+      var indexesOfMatch = [];              
+      for(var i=0; i<friendFoundArray.length;i++){ 
+        if(friendFoundArray[i] == lowestDifference){ 
+            indexesOfMatch.push(i); 
+            count++;        
+        }
+      }
+      console.log("Number of matches: " + count);           
+      console.log("Index of matches: " + indexesOfMatch);        
 
-      });
-  };
+      res.json(true);
+
+      req.info()
+  });
+
+};
+
+
 
 
 //*****************************
 
-
-        //get the index(s) of the lowest value
-        //this is the match
-        //append the modal match  
-      // console.log(userInfo);
-      // console.log(friends[i].questions);
-      // }
+     
 
 
       
