@@ -180,22 +180,20 @@
        email:  $("#email-input").val().trim(),
        photo:  $("#basic-url").val().trim(),
        questions:  [$("#quest1").val().trim(), $("#quest2").val().trim(), $("#quest3").val().trim(), $("#quest4").val().trim(), $("#quest5").val().trim(), $("#quest6").val().trim(), $("#quest7").val().trim(), $("#quest8").val().trim(), $("#quest9").val().trim(), $("#quest10").val().trim() ]
-
 	 };
 
 	$.post(window.location.origin + "/api/friends", objToSend)
 		.done(function (data) {
 			if(true)
-				//alert('match found') ;
-         		//console.log("Response " + JSON.stringify(data));
          		var name = data.name;
          		var photo = data.photo;
          		
          		console.log(name);
-         		
+         	// jQuery.noConflict(); 	
+         	$('#myModal').modal('show');
          	
          });
- 	$('#myModal').modal('show');
+ 	
   	$("#survey-form")[0].reset();
 });
 
