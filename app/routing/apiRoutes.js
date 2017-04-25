@@ -33,6 +33,10 @@ module.exports = function(app) {
     var userScore = userChoicesArray.reduce(function(a, b) { return parseInt(a) + parseInt (b); }, 0);
     console.log("UserScore: " + userScore);
     var friendFoundArray = [];
+
+    var lowestScoreFound = 1000000000;
+    var lowestScoreFriendIndex = -1;
+
       for (var i =0; i < friends.length - 1; i++) {
         //Stores questions array in new variable for each friend;
         var matchChoicesArray = [];
@@ -49,26 +53,41 @@ module.exports = function(app) {
         }
         // Get the absolute value of the the user's score and each match
         var totalScore = Math.abs(matchScore - userScore);
-        console.log("TotalScore: "+totalScore);
-        friendFoundArray.push(totalScore);
-        console.log("Friends scores: " + friendFoundArray);
-      } 
-      //Find the lowest difference and get the index of the matches
-      var lowestDifference = Math.min.apply(Math, friendFoundArray);     
-      var count = 0;                            
-      var indexesOfMatch = [];              
-      for(var i=0; i<friendFoundArray.length;i++){ 
-        if(friendFoundArray[i] == lowestDifference){ 
-            indexesOfMatch.push(i); 
-            count++;        
+
+        if(totalScore < lowestScoreFound) {
+          lowestScoreFound = totalScore;
+          lowestScoreFriendIndex = i;
         }
+
+        console.log("TotalScore: "+totalScore);
+        friendFoundArray.push({index: i, score: totalScore});
+        //console.log("Friends scores: " + friendFoundArray);
       }
-      console.log("Number of matches: " + count);           
-      console.log("Index of matches: " + indexesOfMatch);        
+      
+      var storeScores = friendFoundArray.map(function(data){
+        return data.score;
+      });
+      console.log(storeScores);
 
-      res.json(true);
+      console.log("low score: " + lowestScoreFound + " for friend at: " + lowestScoreFriendIndex)
+      var getMatchData = friends[lowestScoreFriendIndex];
+      console.log(JSON.stringify(getMatchData));
 
-      req.info()
+      //Find the lowest difference and get the index of the matches
+      // var lowestDifference = Math.min.apply(Math, friendFoundArray);     
+      // var count = 0;                            
+      // var indexesOfMatch = [];              
+      // // for(var i=0; i<friendFoundArray.length;i++){ 
+      // //   if(friendFoundArray[i] == lowestDifference){ 
+      // //       indexesOfMatch.push(i); 
+      // //       count++;        
+      // //   }
+      // // }
+      // console.log("Number of matches: " + count);           
+      // console.log("Index of matches: " + indexesOfMatch);        
+
+      res.json(getMatchData);
+
   });
 
 };
